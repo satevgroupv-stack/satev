@@ -9,7 +9,7 @@ export type Drink = {
 };
 
 async function getDrinks(): Promise<Drink[]> {
-  const res = await fetch("http://localhost:3000/api/products", {
+  const res = await fetch(`${process.env.MAIN_URL}/api/products`, {
     cache: "no-store",
   });
 
