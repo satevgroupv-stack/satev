@@ -28,6 +28,56 @@ export async function connectDB() {
 
 
 
+
+
+// export const seedMachines = async () => {
+//   await connectDB();
+
+//   const objId = new mongoose.Types.ObjectId("69c84dfaafe1f10e4a95e0e1");
+
+//   const machineDoc = {
+//     _id: objId,
+//     id: "mch_sk_4740ed6ce010137901ba3580ff6cd85e",
+//     name: "Revo-001",
+//     address: "AASTU, Addis Ababa, Ethiopia",
+//     shelf: [
+//       {
+//         no: 1,
+//         name: "Shelf 1",
+//         lastPoll: 1774734842387,
+//       },
+//     ],
+//     createdAt: new Date("2026-03-28T21:54:02.396Z"),
+//     updatedAt: new Date("2026-03-28T21:54:02.396Z"),
+//     __v: 0,
+//   };
+
+//   await Machine.updateOne(
+//     { id: machineDoc.id },
+//     { $set: machineDoc, $setOnInsert: { createdAt: machineDoc.createdAt } },
+//     { upsert: true }
+//   );
+// };
+
+//  seedMachines()
+//     .then(() => {
+//       console.log("Machine seeded");
+//       mongoose.connection.close();
+//     })
+//     .catch((err) => {
+//       console.error("Seeding error:", err);
+//       mongoose.connection.close();
+//     });
+
+
+
+
+
+
+
+
+
+
 // export const seedProducts = async () => {
 //     const products = [
 //         {

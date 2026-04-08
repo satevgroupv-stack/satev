@@ -9,6 +9,7 @@ interface IShelf {
 // 2. Machine interface
 export interface IMachine extends Document {
     id: string;
+  name: string;
   address: string;
   shelf: IShelf[];
   lastPoll: number; // timestamp (int)
@@ -32,6 +33,11 @@ const ShelfSchema: Schema<IShelf> = new Schema(
 const MachineSchema: Schema<IMachine> = new Schema(
   {
     id: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    name: {
       type: String,
       required: true,
       trim: true,

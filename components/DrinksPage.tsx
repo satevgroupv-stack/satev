@@ -96,8 +96,8 @@ export default function DrinksPage({
               </span>
 
               <div className="flex items-center gap-3">
-                <button onClick={() => updateQty(id, -1)} className="font-bold cursor-pointer hover:bg-[#374151] p-1 rounded">-</button>
-                <button onClick={() => updateQty(id, 1)} className="font-bold cursor-pointer hover:bg-[#374151] p-1 rounded ">+</button>
+                <button onClick={() => updateQty(id, -1)} className="font-bold cursor-pointer hover:bg-[#374151] rounded" style={{fontSize:"2.2rem",padding:"0.15rem 0.4rem"}}>-</button>
+                <button onClick={() => updateQty(id, 1)} className="font-bold cursor-pointer hover:bg-[#374151] rounded " style={{fontSize:"2.2rem",padding:"0.15rem 0.4rem"}}>+</button>
                 <Trash2
                   size={18}
                   className="text-red-500 cursor-pointer hover:bg-[#374151]  rounded"

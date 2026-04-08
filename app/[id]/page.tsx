@@ -20,5 +20,5 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     return <div>Machine not found</div>;
   }
   // 3. render
-  return <ClientFlow  id={machine.id} address={machine.address} />;
+  return <ClientFlow  id={machine.id} address={machine.address} name={machine.name} />;
 }

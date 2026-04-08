@@ -12,7 +12,7 @@ export async function GET(req: NextRequest) {
             { status: 400 }
         );
     }
-    const machine = Machine.findOne({ id: machineId });
+    const machine = await Machine.findOne({ id: machineId });
     if(!machine) {
         return NextResponse.json(
             { error: "Machine not found" },

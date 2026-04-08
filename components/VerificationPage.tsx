@@ -1,10 +1,11 @@
 interface Props {
   onVerify: () => void;
   id: string | null;
+  name: string | null;
   address: string | null;
 }
 
-export default function VerificationPage({ onVerify,id,address }: Props) {
+export default function VerificationPage({ onVerify,id,address,name }: Props) {
   return (
     <div className="min-h-screen bg-[#0f172a] flex flex-col items-center justify-center text-center p-6">
 
@@ -37,7 +38,7 @@ export default function VerificationPage({ onVerify,id,address }: Props) {
           <p><strong>Machine:</strong> Revov Machine</p>
           <p><strong>Location:</strong> {address}</p>
           <p className="text-sm text-[#D9D9D9]/70 break-all">
-            ID: {id}
+            ID: {name}
           </p>
         </div>
 

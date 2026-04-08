@@ -6,8 +6,8 @@ import VerificationPage from "./VerificationPage";
 
 
 
-export default function ClientFlow({ address,id }: { address: string; id: string }) {
- return <VerificationPage id={id} address={address} onVerify={() => {
+export default function ClientFlow({ address,id,name }: { address: string; id: string,name:string }) {
+ return <VerificationPage id={id} address={address} name={name} onVerify={() => {
   window.location.replace(`/${id}/shop`);
  }} />;
   }
