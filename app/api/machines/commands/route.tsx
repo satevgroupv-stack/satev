@@ -20,7 +20,7 @@ export async function GET(req: NextRequest) {
         );
     }
 
-    const order = await Order.findOne({ machineId: machineId, paymentStatus: "sucess", orderFilled: false }).sort({ date: -1 });
+    const order = await Order.findOne({ machineId: machineId, paymentStatus: "success", orderFilled: false }).sort({ date: -1 });
     if(!order) {
         return NextResponse.json(
             { error: "No pending orders found for this machine" },
