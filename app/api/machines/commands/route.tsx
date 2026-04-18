@@ -13,6 +13,10 @@ export async function GET(req: NextRequest) {
             { status: 400 }
         );
     }
+    
+    await connectDB();
+
+
     const machine = await Machine.findOne({ id: machineId });
     if(!machine) {
         return NextResponse.json(
@@ -20,7 +24,6 @@ export async function GET(req: NextRequest) {
             { status: 404 }
         );
     }
-    await connectDB();
     const order = await Order.findOne({ machineId: machineId, paymentStatus: "success", orderFilled: false,stale: false }).sort({ date: -1 });
 
     
