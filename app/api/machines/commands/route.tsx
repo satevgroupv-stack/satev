@@ -20,7 +20,7 @@ export async function GET(req: NextRequest) {
         );
     }
 
-    const order = await Order.findOne({ machineId: machineId, paymentStatus: "success", orderFilled: false,createdAt: { $gte: new Date(Date.now() - 10 * 60 * 1000) } }).sort({ date: -1 });
+    const order = await Order.findOne({ machineId: machineId, paymentStatus: "success", orderFilled: false,stale: false }).sort({ date: -1 });
 
     
     if(!order) {
@@ -30,13 +30,14 @@ export async function GET(req: NextRequest) {
         );
     }
 
-    // if(order.createdAt && order.createdAt.getTime() < Date.now() - 10 * 60 * 1000) { // 10 minutes
-    //    console.log("Order is too old, skipping:", order._id);
-    //     return NextResponse.json(
-    //         { error: "No recent pending orders found for this machine" },
-    //         { status: 404 }
-    //     );
-    // }
+    if(order.createdAt && order.createdAt.getTime() < Date.now() - 10 * 60 * 1000) { // 10 minutes
+      Order.updateOne({ _id: order._id }, { $set: { stale: true } }).exec();
+       console.log("Order is too old, skipping:", order._id);
+        return NextResponse.json(
+            { error: "No recent pending orders found for this machine" },
+            { status: 404 }
+        );
+    }
 
     const products = order?.products;
     console.log("Products to dispense:", products,order);
