@@ -1,6 +1,7 @@
 import Machine from '@/models/Machine';
 import Order from '@/models/Order';
 import { NextRequest, NextResponse } from 'next/server';
+import { connectDB } from '@/lib/mongoose';
 
 export async function GET(req: NextRequest) {
     // Extract the Authorization header
@@ -19,7 +20,7 @@ export async function GET(req: NextRequest) {
             { status: 404 }
         );
     }
-
+    await connectDB();
     const order = await Order.findOne({ machineId: machineId, paymentStatus: "success", orderFilled: false,stale: false }).sort({ date: -1 });
 
     
