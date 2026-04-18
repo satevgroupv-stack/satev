@@ -17,6 +17,7 @@ export interface IOrder extends Document {
   txRef: string; // transaction reference for payment
   orderFilled: boolean; // whether the order has been fulfilled
   lakipayTransactionId?: string; // store LakiPay transaction ID if applicable
+  createdAt?: Date; // for easier date comparisons
 }
 
 // 3. Product schema (embedded)

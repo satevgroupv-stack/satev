@@ -29,8 +29,19 @@ export async function connectDB() {
 
 
 
-
-
+(async () => {
+  console.log("Testing DB connection and fetching recent successful orders...");
+  const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
+  console.log("Five minutes ago:", fiveMinutesAgo);
+    const order = await Order.findOne({
+      machineId: "mch_sk_4740ed6ce010137901ba3580ff6cd85e",
+      paymentStatus: "success",
+      orderFilled: false,
+      // createdAt: { $gte: fiveMinutesAgo }
+    }).sort({ date: -1 }); 
+    console.log("Order:", order);
+})();
+ 
 // export const seedMachines = async () => {
 //   await connectDB();
 
