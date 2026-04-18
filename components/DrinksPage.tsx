@@ -2,6 +2,7 @@
 
 import { Trash2 } from "lucide-react";
 import toast, { Toaster } from "react-hot-toast";
+import CachedImage from "./CachedImage";
 
 interface Props {
   cart: Record<string, number>;
@@ -38,8 +39,8 @@ export default function DrinksPage({
             key={drink.id}
             className="bg-[#1e2937] rounded-3xl p-4 flex gap-4 shadow-md border-2 border-[#ff7101]/10 hover:border-[#ff7101]/60 cursor-pointer transition-all duration-300"
             >
-            <img src={drink.image} className="w-24 h-24 rounded-xl object-cover" />
-
+            {/* <img src={drink.image} className="w-24 h-24 rounded-xl object-cover"  /> */}
+            <CachedImage src={drink.image} className="w-24 h-24 rounded-xl object-cover"  />
             <div className="flex-1">
               <h3 className="text-xl font-bold text-[#D9D9D9]">
               {drink.name} <span className="text-[#ff7101]">{drink.amharic}</span>

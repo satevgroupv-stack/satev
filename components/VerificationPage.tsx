@@ -48,7 +48,7 @@ export default function VerificationPage({ onVerify,id,address,name }: Props) {
 
         <button
           onClick={onVerify}
-          className="w-full bg-[#D9D9D9] text-black py-5 rounded-3xl text-xl font-bold"
+          className="w-full bg-[#D9D9D9] text-black py-5 rounded-3xl text-xl font-bold cursor-pointer"
         >
           YES, THIS IS CORRECT
         </button>

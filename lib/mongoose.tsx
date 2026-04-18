@@ -1,4 +1,5 @@
 import Machine from "@/models/Machine";
+import Order from "@/models/Order";
 import mongoose from "mongoose";
 
 const MONGODB_URI = process.env.MONGODB_URI!;

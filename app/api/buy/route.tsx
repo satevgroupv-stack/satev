@@ -1,8 +1,13 @@
+import { MAIN_URL } from '@/constants';
 import generateChapaPayout from '@/lib/generateChapaPayout';
+
+import processLakipayPayment from '@/lib/lakipay/processPayment';
 import { connectDB } from '@/lib/mongoose';
 import Order from '@/models/Order';
 import Product from '@/models/Product';
 import { NextResponse, NextRequest } from 'next/server';
+import { v4 as uuidv4 } from "uuid";
+
 
 export async function POST(request: NextRequest) {
     const data = await request.json();
@@ -22,6 +27,9 @@ export async function POST(request: NextRequest) {
         }
         return total + (drink ? drink?.price * qty : 0);
     }, 0);
+
+    if(data?.method === "CHAPA"){
+
 
     console.log("Received data:", data);
     const payoutResult = await generateChapaPayout(`${sum}`, data, data.machine);
@@ -46,7 +54,42 @@ export async function POST(request: NextRequest) {
         txRef: tx_ref,
     });
     return NextResponse.json(
-        { received: data,chapaResponse},
+        { received: data,checkOut:chapaResponse?.data?.checkout_url},
         { status: 200 }
     );
+}else if (data?.method === "LAKIPAY"){
+ 
+        const reference = generateTransactionReference();
+        const LAKIPAY_CALLBACK_URL = MAIN_URL + `/${data.machine}` + "/lakipay/";
+    const lakipayResponse = await processLakipayPayment({ amount: sum , reference, redirect: LAKIPAY_CALLBACK_URL }); // Replace 100.00 with actual amount
+    console.log("Lakipay response:", lakipayResponse);
+    await connectDB();
+    const order = await Order.create({
+        machineId: data.machine,
+        products: Object.entries(data.cart).map(([id, qty]) => ({
+            id,
+            qty: typeof qty === "number" ? qty : Number(qty),
+            name: id
+        })),
+        paymentURL:"",
+        date: Date.now(),
+        txRef: reference,
+        lakipayTransactionId: lakipayResponse?.lakipay_transaction_id || "",
+    });
+
+    return NextResponse.json(
+            { received: data, checkOut:lakipayResponse?.payment_url},
+            { status: 200 }
+        );
+}else {
+    return NextResponse.json(
+        { error: "Invalid payment method" },
+        { status: 400 }
+    );
+}
+}
+
+
+function generateTransactionReference() {
+  return `lakipay_${uuidv4()}`;
 }

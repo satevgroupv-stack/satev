@@ -1,7 +1,7 @@
 "use client";
 import { CHECKOUT_CART } from "@/constants";
 import { Toaster, toast } from "react-hot-toast";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 // "use client";
 interface Props {
@@ -10,36 +10,67 @@ interface Props {
 }
 
 export default function PaymentPage({ id }: Props) {
-    const [loading, setLoading] = useState(false);
-    let cart : Record<string, number> = {};
-    const [drinks, setDrinks] = useState<any[]>([]);
+   const [loading, setLoading] = useState(false);
+const [method, setMethod] = useState<"CHAPA" | "LAKIPAY">("LAKIPAY");
 
-    useEffect( () => {
-      const fetchDrinks = async () => {
-        const drinks = await axios.get("/api/products").then(res => res.data);
-        setDrinks(drinks);
-      }
-      fetchDrinks();
-    }, []);
+const [cart, setCart] = useState<Record<string, number>>({});
+const [drinks, setDrinks] = useState<any[]>([]);
 
+/** ✅ Fetch products ONLY ONCE */
+useEffect(() => {
+  const fetchDrinks = async () => {
     try {
-
-      const cartString = localStorage.getItem(CHECKOUT_CART); 
-      cart = cartString ? JSON.parse(cartString).cart : null;
-    }catch(e){
-
+      const res = await axios.get("/api/products");
+      setDrinks(res.data);
+    } catch (error) {
+      console.error("Failed to fetch drinks:", error);
     }
-   
-    const totalSum = Object.entries(cart || {}).reduce((sum, [id, qty]) => {
-      const drink = drinks?.find((d: any) => d.id === id);
-      return sum + (drink ? drink.price * qty : 0);
-    }, 0);  
+  };
+
+  fetchDrinks();
+}, []); // ✅ FIXED
+
+/** Load cart once */
+useEffect(() => {
+  try {
+    const cartString = localStorage.getItem(CHECKOUT_CART);
+    if (cartString) {
+      const parsed = JSON.parse(cartString);
+      setCart(parsed.cart ?? {});
+    }
+  } catch (e) {
+    console.error("Failed to load cart:", e);
+  }
+}, []);
+
+/** Sync cart */
+useEffect(() => {
+  try {
+    localStorage.setItem(CHECKOUT_CART, JSON.stringify({ cart }));
+  } catch (e) {
+    console.error("Failed to save cart:", e);
+  }
+}, [cart]);
+
+/** ✅ Replace state + effect with memo */
+const totalSum = useMemo(() => {
+  return Object.entries(cart || {}).reduce((acc, [id, qty]) => {
+    const drink = drinks.find((d: any) => d.id === id);
+    return acc + (drink ? drink.price * qty : 0);
+  }, 0);
+}, [cart, drinks]);
   const onPay = async () => {
     console.log("Paying...");
-    const cartString = localStorage.getItem(CHECKOUT_CART); 
+
+
+          const cartString = localStorage.getItem(CHECKOUT_CART); 
     console.log("Cart string:", cartString);
     if (!cartString) {
       console.log("No cart found");
+      return;
+    }
+    if(totalSum <= 0){
+      toast.error("Cart is empty");
       return;
     }
     const cartData = JSON.parse(cartString).cart;
@@ -48,14 +79,12 @@ export default function PaymentPage({ id }: Props) {
       toast.error("Cart is empty");
       return;
     }
-    const toastId = toast.loading("Processing payment...");
+          const toastId = toast.loading(`Processing payment with ${method}...`);
     try {
       setLoading(true);
-      
-      const response = await axios.post("/api/buy", { cart: cartData,machine: id });
+      const response = await axios.post("/api/buy", { cart: cartData,machine: id,method });
       toast.dismiss(toastId);
-      const chapaResponse = response.data.chapaResponse;
-      const checkout_url = chapaResponse?.data?.checkout_url;
+      const checkout_url =  response.data?.checkOut;
       const forwardToastId = toast.loading("Redirecting to checkout...");
       if (checkout_url) {
         window.location.href = checkout_url;
@@ -94,7 +123,40 @@ export default function PaymentPage({ id }: Props) {
           Choose how you want to pay for your items
         </p>
 
-        <div className="bg-[#1e2937] border-2 border-[#ff7101]/60 rounded-3xl p-5 mb-6 hover:bg-[#ff7101]/10 transition-colors duration-300 cursor-pointer ">
+
+         <div className={`bg-[#1e2937] border-2 border-[#ff7101]/60 rounded-3xl p-5 mb-6 hover:bg-[#444]/10 transition-colors duration-300 cursor-pointer ${method === "LAKIPAY" ? "border-[#ff7101] bg-[#ff7101]/10" : ""}`} style={{display:"flex",flexDirection:"column",alignItems:"flex-start",justifyContent:"flex-start"}} onClick={() => setMethod(() => "LAKIPAY")}>
+          {/*
+            Cache the image after first load using a simple useState/useEffect.
+            The image will be loaded once and kept in memory for subsequent renders.
+          */}
+          {(() => {
+            const [imgSrc, setImgSrc] = useState<string | null>(null);
+
+            useEffect(() => {
+              if (!imgSrc) {
+                const img = new window.Image();
+                img.src = "https://knovuslab.com/lpay/images/lakipay_dyn.svg";
+                img.onload = () => setImgSrc(img.src);
+              }
+              // eslint-disable-next-line
+            }, []);
+
+            return (
+              <div>
+                <img
+                  src={imgSrc || "https://knovuslab.com/lpay/images/lakipay_dyn.svg"}
+                  alt="Lakipay"
+                  className="h-10 mx-auto object-contain mb-2"
+                  style={{ maxWidth: "150px", display: "block", float: "left" }}
+                />
+              </div>
+            );
+          })()}
+          <p className="text-sm text-white/60">
+            Pay with local bank transfer or mobile money
+          </p>
+        </div>
+        {/* <div className={`bg-[#1e2937] border-2 border-[#ff7101]/60 rounded-3xl p-5 mb-6 hover:bg-[#444]/10 transition-colors duration-300 cursor-pointer ${method === "CHAPA" ? "border-[#ff7101] bg-[#ff7101]/10" : ""}`} onClick={() => setMethod(prev => "CHAPA")}>
           <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 167 63" xmlSpace="preserve" width="120"><path fill="#8dc63f" opacity="0.59" enableBackground="new" d="M11.8,26.2h23.5l0,0l0,0c0,3.6-2.9,6.5-6.5,6.5c0,0,0,0,0,0h-17c-1.8,0-3.3-1.5-3.3-3.3l0,0l0,0
                                 C8.6,27.7,10,26.2,11.8,26.2L11.8,26.2L11.8,26.2z"></path><path fill="#8dc63f" opacity="0.59" enableBackground="new" d="M35.1,17.6l-4.7,6.5h6.2c3.6,0,6.5-2.9,6.5-6.5c0,0,0,0,0,0H35.1z"></path><path fill="#8dc63f" opacity="0.59" enableBackground="new" d="M22.4,24l4.6-6.4H11.9C16.3,17.6,20.4,20.1,22.4,24z"></path><path fill="#7dc400" d="M22.4,24.1l0-0.1l-0.1,0.1H22.4z"></path><path fill="#7dc400" d="M27.2,17.4L27,17.6L22.4,24l0,0.1h-0.1l-1.5,2.1l-4.9,6.7c-1.9,2.2-5.3,2.5-7.5,0.6S5.9,28.2,7.8,26
                                 c1-1.1,2.4-1.8,3.9-1.9h10.7l0.1-0.1c-2-3.9-6.1-6.4-10.5-6.4l0,0h-0.7C4.6,18-0.4,23.6,0,30.1s6,11.5,12.5,11.1
@@ -113,19 +175,19 @@ export default function PaymentPage({ id }: Props) {
           <p className="text-sm text-white/60">
             Pay with local bank transfer or mobile money
           </p>
-        </div>
-
-
+        </div> */}
         <button
           onClick={onPay}
           className="mt-4 w-full bg-[#D9D9D9] text-black py-4 rounded-3xl text-lg font-bold cursor-pointer transition-colors duration-300 hover:bg-[#ff7101]/80 hover:text-white"
+          disabled={loading || totalSum <= 0}
         >
-          PAY WITH CHAPA (ETB {totalSum}.00)
+          PAY WITH {method} (ETB {totalSum}.00)
         </button>
 
         <button
           onClick={() => {
-              window.history.back();
+                window.location.href = `/${id}/shop`;
+                // alert("Payment cancelled. Redirecting to shop.");
             }}
           className="mt-4 w-full bg-transparent border-2 border-[#D9D9D9] text-white py-4 rounded-3xl text-lg font-bold cursor-pointer transition-colors duration-300 hover:bg-[#ff7101]/10 hover:border-[#ff7101]/80"
         >

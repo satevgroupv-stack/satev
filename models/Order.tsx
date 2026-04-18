@@ -12,10 +12,11 @@ export interface IOrder extends Document {
   products: IOrderProduct[];
   date: number; // timestamp
   machineId: string;
-  paymentStatus: "pending" | "paid" | "failed";
+  paymentStatus: "pending" | "sucess" | "failed";
   paymentURL?: string;
   txRef: string; // transaction reference for payment
   orderFilled: boolean; // whether the order has been fulfilled
+  lakipayTransactionId?: string; // store LakiPay transaction ID if applicable
 }
 
 // 3. Product schema (embedded)
@@ -68,7 +69,10 @@ const OrderSchema: Schema<IOrder> = new Schema(
     orderFilled: {
       type: Boolean,
       default: false,
-    }
+    },
+    lakipayTransactionId: {
+      type: String,
+    },
   },
   {
     timestamps: true,

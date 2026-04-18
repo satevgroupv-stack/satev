@@ -1,3 +1,4 @@
+import verifyLakiPayTransaction from "@/lib/lakipay/verifyLakiPayTransaction";
 import { connectDB } from "@/lib/mongoose";
 import verifyChapaTransaction from "@/lib/verifyChapaTransaction";
 import Order from "@/models/Order";
@@ -9,10 +10,17 @@ export const dynamic = "force-dynamic";
 async function verifyTransaction(txRef: string) {
     try {
         console.log("Verifying transaction with txRef:", txRef);
-        const isValid = await verifyChapaTransaction(txRef);
+        let isValid ;
+        if(txRef.startsWith("lakipay_")) {
+            isValid = await verifyLakiPayTransaction(txRef);
+        }else {
+           isValid = await verifyChapaTransaction(txRef)
+        }
+
+
         if(isValid) {
             console.log("Transaction is valid. Proceeding to modify order...");
-            await modifyOrder(txRef,"sucess");
+            await modifyOrder(txRef,"success");
         } else {
             modifyOrder(txRef,"failed");
             return false;
