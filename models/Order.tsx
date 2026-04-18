@@ -18,7 +18,6 @@ export interface IOrder extends Document {
   orderFilled: boolean; // whether the order has been fulfilled
   lakipayTransactionId?: string; // store LakiPay transaction ID if applicable
   createdAt?: Date; // for easier date comparisons
-  stale?: boolean; // flag to mark old orders that shouldn't be processed
 }
 
 // 3. Product schema (embedded)
@@ -75,10 +74,7 @@ const OrderSchema: Schema<IOrder> = new Schema(
     lakipayTransactionId: {
       type: String,
     },
-    stale: {
-    type: Boolean,
-    default: false,
-  }
+    
   },
   {
     timestamps: true,
