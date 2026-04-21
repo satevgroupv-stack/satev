@@ -13,6 +13,7 @@ export interface IMachine extends Document {
   address: string;
   shelf: IShelf[];
   lastPoll: number; // timestamp (int)
+  total: number;
 }
 
 // 3. Schema
@@ -55,6 +56,11 @@ const MachineSchema: Schema<IMachine> = new Schema(
       type: Number, // store as timestamp (e.g. Date.now())
       required: true,
       default: Date.now,
+    },
+    total: {
+      type: Number,
+      required: false,
+      default: 0,
     },
   },
   {

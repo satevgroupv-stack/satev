@@ -52,6 +52,7 @@ export async function connectDB() {
 //     id: "mch_sk_4740ed6ce010137901ba3580ff6cd85e",
 //     name: "Revo-001",
 //     address: "AASTU, Addis Ababa, Ethiopia",
+//     total: 0,
 //     shelf: [
 //       {
 //         no: 1,

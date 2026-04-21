@@ -8,13 +8,18 @@ export type Drink = {
   amharic?: string;
 };
 
-async function getDrinks(): Promise<Drink[]> {
-  const res = await fetch(`${process.env.MAIN_URL}/api/products`, {
+export type Machine = {
+  id: string;
+  total: number;
+};
+
+async function getDrinks(id: string): Promise<{ products: Drink[]; machine: Machine }> {
+  const res = await fetch(`${process.env.MAIN_URL}/api/products?id=${id}`, {
     cache: "no-store",
   });
 
-  if (!res.ok) return [];
-
+  // console.log("Raw response from API:", res);
+  if (!res.ok) return { products: [], machine: { id: "", total: 0 } };
   return res.json();
 }
 
@@ -23,8 +28,10 @@ export default async function Shop({
 }: {
   params: Promise<{ id: string }>;
 }) {
-  const drinks = await getDrinks();
   const { id } = await params;
+  const res = await getDrinks(id)
+  const {products ,machine} = res;
+  const drinks = products || [];
 
-  return <ClientShop drinks={drinks} id={id} />;
+  return <ClientShop drinks={products} id={id} machine={machine} />;
 }

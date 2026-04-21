@@ -25,7 +25,7 @@ export async function GET(req: NextRequest) {
         );
     }
     const order = await Order.findOne({ machineId: machineId, paymentStatus: "success", orderFilled: false,createdAt: { $gte: new Date(Date.now() - 10 * 60 * 1000) } }).sort({ date: -1 });
-
+    
     
     if(!order) {
         return NextResponse.json(
@@ -53,8 +53,12 @@ export async function GET(req: NextRequest) {
     { _id: order._id },
     { $set: { orderFilled: true } }
   );
-  
-
+  const decrementVal = espProducts.reduce((sum, p) => sum + p.quantity, 0);
+  console.log("Decrementing machine total by:", decrementVal);
+  await Machine.updateOne(
+    { id: machineId },
+    { $inc: { total: -decrementVal } }
+  );
     // Example: respond with the token (never do this in production)
     return NextResponse.json({
     success: true,

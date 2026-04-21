@@ -3,6 +3,7 @@
 import { Trash2 } from "lucide-react";
 import toast, { Toaster } from "react-hot-toast";
 import CachedImage from "./CachedImage";
+import { Machine } from "@/app/[id]/shop/page";
 
 interface Props {
   cart: Record<string, number>;
@@ -11,6 +12,7 @@ interface Props {
   total: number;
   onCheckout: () => void;
   drinks: [] | any[];
+  machine: Machine;
 }
 
 export default function DrinksPage({
@@ -20,8 +22,10 @@ export default function DrinksPage({
   total,
   onCheckout,
   drinks = [],
+  machine
 }: Props) {
   let id : string | undefined = undefined;
+  console.log("Rendering DrinksPage with props:", { cart, total, drinks, machine });
   return (
     <div className="min-h-screen bg-[#0f172a] pb-40 p-6 max-w-2xl mx-auto">
 
@@ -51,6 +55,14 @@ export default function DrinksPage({
 
               <button
               onClick={() => {
+                if(machine.total <= 0) {
+                  if(id !== undefined || id !== null || id !== ""){ 
+                    toast.dismiss(id);
+                  }
+                  id = toast.error("Sorry, the machine is out of stock.");
+                  return;
+                }
+
                 if(drink.id !== "coca") {
                   if(id !== undefined || id !== null || id !== ""){ 
                     toast.dismiss(id);

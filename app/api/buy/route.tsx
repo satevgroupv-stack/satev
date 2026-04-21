@@ -3,6 +3,7 @@ import generateChapaPayout from '@/lib/generateChapaPayout';
 
 import processLakipayPayment from '@/lib/lakipay/processPayment';
 import { connectDB } from '@/lib/mongoose';
+import Machine from '@/models/Machine';
 import Order from '@/models/Order';
 import Product from '@/models/Product';
 import { NextResponse, NextRequest } from 'next/server';
@@ -18,6 +19,23 @@ export async function POST(request: NextRequest) {
         );
     }
     await connectDB();
+    const machine = await Machine.findOne({id: data.machine});
+    if(!machine) {
+        return NextResponse.json(
+            { error: "Machine not found" },
+            { status: 404 }
+        );
+    }
+    const total = machine.total;
+    const cartQtySum = Object.entries(data.cart).reduce((sum: number, [_, qty]) => sum + Number(qty), 0);
+
+    if(total < cartQtySum) {
+        return NextResponse.json(
+            { error: "Not enough stock available" },
+            { status: 400 }
+        );
+    }
+
     const drinks = await Product.find();
     const sum = Object.entries(data.cart).reduce((total, [id, qty]) => {
         const drink = drinks.find(d => d.id === id);

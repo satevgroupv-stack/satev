@@ -2,17 +2,19 @@
 
 import { useEffect, useState } from "react";
 import DrinksPage from "@/components/DrinksPage";
-import type { Drink } from "@/app/[id]/shop/page";
+import type { Drink, Machine } from "@/app/[id]/shop/page";
 import { CHECKOUT_CART, DRINKS_KEY } from "@/constants";
 
 type ClientShopProps = {
   drinks: Drink[];
   id: string;
+  machine: Machine;
 };
 
 
 
-export default function ClientShop({ drinks, id }: ClientShopProps) {
+export default function ClientShop({ drinks, id, machine}: ClientShopProps) {
+  console.log("ClientShop received props:", { drinks, id, machine });
   const [cart, setCart] = useState<Record<string, number>>({});
   // Load cart from localStorage
   useEffect(() => {
@@ -89,6 +91,7 @@ export default function ClientShop({ drinks, id }: ClientShopProps) {
       updateQty={updateQty}
       total={total}
       onCheckout={onCheckout}
+      machine={machine}
     />
   );
 }
