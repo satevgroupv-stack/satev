@@ -47,8 +47,6 @@ export async function POST(request: NextRequest) {
     }, 0);
 
     if(data?.method === "CHAPA"){
-
-
     console.log("Received data:", data);
     const payoutResult = await generateChapaPayout(`${sum}`, data, data.machine);
     if (!payoutResult) {
