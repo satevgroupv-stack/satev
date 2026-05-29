@@ -159,7 +159,7 @@ const totalSum = useMemo(() => {
             Pay with local bank transfer or mobile money
           </p>
         </div>
-        {/* <div className={`bg-[#1e2937] border-2 border-[#ff7101]/60 rounded-3xl p-5 mb-6 hover:bg-[#444]/10 transition-colors duration-300 cursor-pointer ${method === "CHAPA" ? "border-[#ff7101] bg-[#ff7101]/10" : ""}`} onClick={() => setMethod(prev => "CHAPA")}>
+        <div className={`bg-[#1e2937] border-2 border-[#ff7101]/60 rounded-3xl p-5 mb-6 hover:bg-[#444]/10 transition-colors duration-300 cursor-pointer ${method === "CHAPA" ? "border-[#ff7101] bg-[#ff7101]/10" : ""}`} onClick={() => setMethod(prev => "CHAPA")}>
           <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 167 63" xmlSpace="preserve" width="120"><path fill="#8dc63f" opacity="0.59" enableBackground="new" d="M11.8,26.2h23.5l0,0l0,0c0,3.6-2.9,6.5-6.5,6.5c0,0,0,0,0,0h-17c-1.8,0-3.3-1.5-3.3-3.3l0,0l0,0
                                 C8.6,27.7,10,26.2,11.8,26.2L11.8,26.2L11.8,26.2z"></path><path fill="#8dc63f" opacity="0.59" enableBackground="new" d="M35.1,17.6l-4.7,6.5h6.2c3.6,0,6.5-2.9,6.5-6.5c0,0,0,0,0,0H35.1z"></path><path fill="#8dc63f" opacity="0.59" enableBackground="new" d="M22.4,24l4.6-6.4H11.9C16.3,17.6,20.4,20.1,22.4,24z"></path><path fill="#7dc400" d="M22.4,24.1l0-0.1l-0.1,0.1H22.4z"></path><path fill="#7dc400" d="M27.2,17.4L27,17.6L22.4,24l0,0.1h-0.1l-1.5,2.1l-4.9,6.7c-1.9,2.2-5.3,2.5-7.5,0.6S5.9,28.2,7.8,26
                                 c1-1.1,2.4-1.8,3.9-1.9h10.7l0.1-0.1c-2-3.9-6.1-6.4-10.5-6.4l0,0h-0.7C4.6,18-0.4,23.6,0,30.1s6,11.5,12.5,11.1
@@ -178,7 +178,7 @@ const totalSum = useMemo(() => {
           <p className="text-sm text-white/60">
             Pay with local bank transfer or mobile money
           </p>
-        </div> */}
+        </div>
         <button
           onClick={onPay}
           className="mt-4 w-full bg-[#D9D9D9] text-black py-4 rounded-3xl text-lg font-bold cursor-pointer transition-colors duration-300 hover:bg-[#ff7101]/80 hover:text-white"
