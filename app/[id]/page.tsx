@@ -1,6 +1,6 @@
 // app/[id]/page.tsx
 
-import ClientFlow from "../../components/ClientFlow";
+import ClientFlow from "../../src/components/ClientFlow";
 import { connectDB } from "@/lib/mongoose";
 import Machine from "@/models/Machine";
 

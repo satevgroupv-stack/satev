@@ -1,4 +1,4 @@
-import LakiPaymentPage from "@/components/Lakipay";
+import LakiPaymentPage from "@/src/components/Lakipay";
 
 
 export default async function Payment({ params }: { params: Promise<{ id: string }> }) {

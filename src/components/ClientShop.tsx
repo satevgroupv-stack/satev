@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import DrinksPage from "@/components/DrinksPage";
+import DrinksPage from "@/src/components/DrinksPage";
 import type { Drink, Machine } from "@/app/[id]/shop/page";
 import { CHECKOUT_CART, DRINKS_KEY } from "@/constants";
 
@@ -14,7 +14,7 @@ type ClientShopProps = {
 
 
 export default function ClientShop({ drinks, id, machine}: ClientShopProps) {
-  console.log("ClientShop received props:", { drinks, id, machine });
+  // console.log("ClientShop received props:", { drinks, id, machine });
   const [cart, setCart] = useState<Record<string, number>>({});
   // Load cart from localStorage
   useEffect(() => {

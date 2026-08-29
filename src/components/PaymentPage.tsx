@@ -3,6 +3,8 @@ import { CHECKOUT_CART } from "@/constants";
 import { Toaster, toast } from "react-hot-toast";
 import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
+import { useParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 // "use client";
 interface Props {
   id?: string;
@@ -12,6 +14,15 @@ interface Props {
 export default function PaymentPage({ id }: Props) {
    const [loading, setLoading] = useState(false);
 const [method, setMethod] = useState<"CHAPA" | "LAKIPAY">("LAKIPAY");
+
+
+
+const searchParams = useSearchParams();
+const chapaOn = searchParams?.get("chapa");
+
+const isChapaON = chapaOn === "sagghjksgtiuvd82";
+console.log("isChapaON:", isChapaON, chapaOn);
+
 
 const [cart, setCart] = useState<Record<string, number>>({});
 const [drinks, setDrinks] = useState<any[]>([]);
@@ -162,7 +173,7 @@ const totalSum = useMemo(() => {
 
 
 {/* CHapa BETWEEN */}
-
+ { isChapaON &&
  
         <div className={`bg-[#1e2937] border-2 border-[#ff7101]/60 rounded-3xl p-5 mb-6 hover:bg-[#444]/10 transition-colors duration-300 cursor-pointer ${method === "CHAPA" ? "border-[#ff7101] bg-[#ff7101]/10" : ""}`} onClick={() => setMethod(prev => "CHAPA")}>
           <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 167 63" xmlSpace="preserve" width="120"><path fill="#8dc63f" opacity="0.59" enableBackground="new" d="M11.8,26.2h23.5l0,0l0,0c0,3.6-2.9,6.5-6.5,6.5c0,0,0,0,0,0h-17c-1.8,0-3.3-1.5-3.3-3.3l0,0l0,0
@@ -184,7 +195,7 @@ const totalSum = useMemo(() => {
             Pay with local bank transfer or mobile money
           </p>
         </div> 
-
+}
 {/* CHapa BETWEEN */}
 
         <button

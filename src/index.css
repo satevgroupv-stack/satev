@@ -1,0 +1,87 @@
+/* @import url() FONT IMPORTS MUST ALWAYS BE AT THE VERY TOP OF THIS FILE, ABOVE THE TAILWIND IMPORTS — DO NOT DELETE THIS COMMENT */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
+
+/* CRITICAL: THE FOLLOWING TAILWIND IMPORTS MUST NEVER BE DELETED OR REORDERED — DO NOT DELETE THIS COMMENT */
+@import "tailwindcss";
+
+/* END TAILWIND IMPORTS — ALL OTHER CSS MUST GO BELOW THIS LINE */
+
+:root {
+  color-scheme: dark;
+}
+html,
+body {
+  min-height: 100%;
+}
+button {
+  cursor: pointer;
+}
+body {
+  background-color: #0e1a40;
+  color: #ffffff;
+  font-family:
+    "Inter",
+    system-ui,
+    -apple-system,
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+/* Animated deep-navy horizon background */
+.app-bg {
+  background:
+    radial-gradient(
+      1200px 600px at 50% -10%,
+      rgba(255, 113, 1, 0.1),
+      transparent 60%
+    ),
+    linear-gradient(120deg, #0a1330 0%, #0e1a40 40%, #16255a 70%, #0e1a40 100%);
+  background-size:
+    100% 100%,
+    300% 300%;
+  animation: gradient-drift 18s ease infinite;
+}
+.glass-card {
+  background: rgba(14, 26, 64, 0.65);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(217, 217, 217, 0.15);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+.glass-header {
+  background: rgba(14, 26, 64, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(217, 217, 217, 0.1);
+}
+.neon-glow {
+  box-shadow: 0 0 30px rgba(255, 113, 1, 0.3);
+}
+.neon-pulse {
+  animation: pulse-glow 1.5s ease-in-out infinite;
+}
+.brand-glow {
+  text-shadow: 0 0 18px rgba(255, 255, 255, 0.25);
+}
+/* Thin scrollbar for auto-scrolling galleries */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+.animate-marquee {
+  animation: marquee 40s linear infinite;
+}
+.animate-marquee:hover {
+  animation-play-state: paused;
+}

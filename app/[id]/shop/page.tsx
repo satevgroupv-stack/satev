@@ -1,4 +1,4 @@
-import ClientShop from "@/components/ClientShop";
+import ClientShop from "@/src/components/ClientShop";
 
 export type Drink = {
   id: string;

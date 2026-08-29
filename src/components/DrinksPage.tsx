@@ -25,7 +25,7 @@ export default function DrinksPage({
   machine
 }: Props) {
   let id : string | undefined = undefined;
-  console.log("Rendering DrinksPage with props:", { cart, total, drinks, machine });
+  // console.log("Rendering DrinksPage with props:", { cart, total, drinks, machine });
   return (
     <div className="min-h-screen bg-[#0f172a] pb-40 p-6 max-w-2xl mx-auto">
 

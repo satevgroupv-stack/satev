@@ -1,6 +1,2 @@
-// app/page.tsx
-import LandingPage from "../components/LandingPage";
-
-export default function Page() {
-  return <LandingPage />;
-}
+import  Landing  from "../pages/Landing";
+export default Landing;
